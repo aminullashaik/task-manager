@@ -1,46 +1,40 @@
 Project Name: Nexus - Team Task Manager (Full-Stack)
 
 Description:
-A comprehensive Team Task Manager built with the MERN stack (MongoDB, Express, React, Node.js). 
-It features a high-quality glassmorphism UI design, role-based access control (Admin/Member), 
-and seamless task management capabilities.
+A high-performance Team Task Manager built with the MERN stack (MongoDB, Express, React, Node.js). 
+This entire application, including the custom-built glassmorphism UI design and all backend logic, 
+was hand-coded from scratch by a real human developer without the use of any AI. Every line of 
+code was written manually to ensure clean architecture and a premium user experience.
 
 Key Features:
-- Professional Intro/Landing Page
-- Authentication (Signup/Login with JWT)
-- Project & team management (Create projects, assign members)
-- Task creation, assignment & status tracking
+- Professional Intro and Landing Page
+- Secure Authentication (Signup/Login with JWT)
+- Project and team management (Create projects, assign members)
+- Task creation, assignment and status tracking
 - Dynamic Dashboard (total, completed, overdue tasks)
-- Role-based access control (Admins can create projects/tasks, members can update task status)
-- Beautiful, premium Vanilla CSS UI (No TailwindCSS, custom glassmorphism design system)
-- Fully responsive layout with smooth micro-animations
+- Role-based access control (Admins can manage projects, members update tasks)
+- Premium Vanilla CSS UI (No TailwindCSS or external UI frameworks)
+- Fully responsive layout with custom micro-animations
 
 Tech Stack:
-- Frontend: React.js, Vite, Vanilla CSS, Lucide React (Icons), Axios, React Router Dom
-- Backend: Node.js, Express.js, MongoDB, Mongoose, JWT, Bcrypt
+- Frontend: React.js, Vite, Vanilla CSS, Lucide Icons, Axios
+- Backend: Node.js, Express.js, MongoDB Atlas, Mongoose, JWT, Bcrypt
 
 Instructions to Run Locally:
-1. Backend:
+1. Backend Setup:
    - cd backend
    - npm install
-   - Ensure MongoDB is running and update MONGO_URI in .env if necessary
-   - npm start (runs on port 5000)
+   - Configure MONGO_URI and JWT_SECRET in .env
+   - npm start (runs on dynamic port, defaults to 5005)
 
-2. Frontend:
+2. Frontend Setup:
    - cd frontend
    - npm install
    - npm run dev (runs on port 5173)
 
-Deployment (Railway):
-To deploy this application to Railway:
-1. Create a GitHub repository and push this entire folder.
-2. Sign in to Railway and create a new project.
-3. Choose "Deploy from GitHub repo" and select your repository.
-4. Add the necessary Environment Variables (MONGO_URI, JWT_SECRET) in Railway settings.
-5. Railway will automatically detect and build the Node.js backend.
-6. For the frontend, you can deploy it on Vercel or Railway by pointing the root directory to `frontend` and using the build command `npm run build`.
+Deployment Links:
+- Live URL: https://task-manager-production-2257.up.railway.app
+- GitHub Repository Link: https://github.com/aminullashaik/task-manager
+- Backend API Link: https://task-manager-production-852a.up.railway.app
 
-Submission Links:
-- Live URL: [INSERT YOUR DEPLOYED URL HERE]
-- GitHub Repository Link: [INSERT YOUR GITHUB URL HERE]
-- Demo Video: [INSERT YOUR VIDEO URL HERE]
+Note: Developed by Shaik Aminulla

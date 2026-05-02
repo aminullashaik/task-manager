@@ -17,11 +17,9 @@ export default function Signup() {
       const res = await API.post("/auth/signup", { name, email, password, role });
       if (res.data.message === "User created") {
         navigate("/login");
-      } else {
-        setError(res.data.message);
       }
     } catch (err) {
-      setError("An error occurred during signup.");
+      setError(err.response?.data?.message || "An error occurred during signup.");
     }
   };
 

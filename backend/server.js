@@ -8,22 +8,44 @@ require("dotenv").config();
 const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth");
 
+const path = require("path");
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the frontend/dist folder
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// Health check route
+app.get("/api/health", (req, res) => {
+  res.json({ 
+    status: "ok", 
+    db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use("/auth", authRoutes);
 app.use("/projects", auth, projectRoutes);
 app.use("/tasks", auth, taskRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Server is running");
+// Catch-all route to serve the frontend index.html for SPA routing
+app.get("*", (req, res) => {
+  if (!req.path.startsWith("/auth") && !req.path.startsWith("/projects") && !req.path.startsWith("/tasks")) {
+    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  }
 });
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+})
 .then(() => console.log("DB connected"))
-.catch(err => console.error("DB Connection Error:", err));
+.catch(err => {
+  console.error("DB Connection Error:", err.message);
+  // Don't exit, but we'll know it failed
+});
 
 app.use((err, req, res, next) => {
   console.error("Express Error:", err);

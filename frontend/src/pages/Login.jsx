@@ -25,13 +25,11 @@ export default function Login() {
         login(res.data);
         addToast("Welcome back to JBS!", "success");
         navigate("/dashboard");
-      } else {
-        setError(res.data.message || "Login failed");
-        addToast(res.data.message || "Login failed", "error");
       }
     } catch (err) {
-      setError("An error occurred during login.");
-      addToast("Connection error. Please try again.", "error");
+      const errorMsg = err.response?.data?.message || "An error occurred during login.";
+      setError(errorMsg);
+      addToast(errorMsg, "error");
     }
   };
 

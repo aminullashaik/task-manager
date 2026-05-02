@@ -15,15 +15,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the frontend/dist folder
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// Resolve the path to the frontend dist folder
+const frontendPath = path.resolve(__dirname, "../frontend/dist");
+console.log(`[Server] Attempting to serve static files from: ${frontendPath}`);
+
+// Serve static files
+app.use(express.static(frontendPath));
 
 // Health check route
 app.get("/api/health", (req, res) => {
   res.json({ 
     status: "ok", 
     db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    path: frontendPath
   });
 });
 
@@ -53,6 +58,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5005;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server started on port ${PORT}`);
 });

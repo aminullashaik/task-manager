@@ -3,6 +3,7 @@ const taskRoutes = require("./routes/task");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const compression = require("compression");
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth");
@@ -14,13 +15,17 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(compression());
 
 // Resolve the path to the frontend dist folder
 const frontendPath = path.resolve(__dirname, "../frontend/dist");
 console.log(`[Server] Attempting to serve static files from: ${frontendPath}`);
 
-// Serve static files
-app.use(express.static(frontendPath));
+// Serve static files with caching
+app.use(express.static(frontendPath, {
+  maxAge: '1d', // Cache for 1 day
+  etag: true
+}));
 
 // Health check route
 app.get("/api/health", (req, res) => {

@@ -54,8 +54,13 @@ router.post("/login", async (req, res) => {
 
 // get all users
 router.get("/users", async (req, res) => {
-  const users = await User.find({}, "name email role");
-  res.json(users);
+  try {
+    const users = await User.find({}, "name email role");
+    res.json(users);
+  } catch (err) {
+    console.error("Fetch users error:", err);
+    res.status(500).json({ message: "Server error fetching users" });
+  }
 });
 
 module.exports = router;

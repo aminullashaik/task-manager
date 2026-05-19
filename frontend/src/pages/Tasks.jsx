@@ -148,7 +148,7 @@ export default function Tasks() {
   const getStatusBadge = (t) => {
     if (t.status === 'done') return <span className="badge badge-done" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)' }}>Completed</span>;
     if (t.isLocked) return <span className="badge badge-working" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)' }}>Working (Locked)</span>;
-    if (new Date(t.dueDate) < new Date()) return <span className="badge badge-overdue" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)' }}>Overdue</span>;
+    if (t.dueDate && new Date(t.dueDate) < new Date()) return <span className="badge badge-overdue" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)' }}>Overdue</span>;
     return <span className="badge badge-pending" style={{ background: 'rgba(59, 130, 246, 0.1)', color: 'var(--accent-color)' }}>Pending</span>;
   };
 

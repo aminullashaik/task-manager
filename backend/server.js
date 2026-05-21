@@ -42,7 +42,7 @@ app.use("/projects", auth, projectRoutes);
 app.use("/tasks", auth, taskRoutes);
 
 // Catch-all route to serve the frontend index.html for SPA routing
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
   if (!req.path.startsWith("/auth") && !req.path.startsWith("/projects") && !req.path.startsWith("/tasks")) {
     res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
   }

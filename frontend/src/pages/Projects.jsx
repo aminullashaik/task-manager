@@ -122,5 +122,3 @@ export default function Projects() {
     </div>
   );
 }
-
-// Refresh status

@@ -54,5 +54,3 @@ export default function Sidebar() {
     </div>
   );
 }
-
-// Refresh status

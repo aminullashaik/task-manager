@@ -87,5 +87,3 @@ export default function Login() {
     </div>
   );
 }
-
-// Refresh status

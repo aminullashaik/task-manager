@@ -3,6 +3,8 @@ import Sidebar from "./Sidebar";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
+// Layout wrapper for authenticated routes
+
 export default function Layout() {
   const { user } = useContext(AuthContext);
 

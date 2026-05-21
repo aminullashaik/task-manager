@@ -3,6 +3,8 @@ import { LayoutDashboard, FolderKanban, CheckSquare, LogOut, User } from "lucide
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
+// Main navigation sidebar component
+
 export default function Sidebar() {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();

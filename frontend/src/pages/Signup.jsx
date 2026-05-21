@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../api";
-import { CheckSquare } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { useToast } from "../context/ToastContext";
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("member");
-  const [error, setError] = useState("");
+  const { addToast } = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -16,27 +18,26 @@ export default function Signup() {
     try {
       const res = await API.post("/auth/signup", { name, email, password, role });
       if (res.data.message === "User created") {
+        addToast("Account created successfully! Please sign in.", "success");
         navigate("/login");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred during signup.");
+      const errorMsg = err.response?.data?.message || "An error occurred during signup.";
+      addToast(errorMsg, "error");
     }
   };
 
   return (
     <div className="auth-container">
       <div className="glass-card auth-box animate-fade-in">
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <CheckSquare color="var(--accent-color)" size={48} style={{ margin: '0 auto', marginBottom: '1rem' }} />
-          <h2>Create an Account</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Join JBS today</p>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <h1 style={{ fontSize: '2.25rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '0.5rem' }}>JBS</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>Enterprise Task Management</p>
         </div>
         
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.875rem' }}>
+        <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-color)', marginBottom: '2rem', fontSize: '0.875rem', textDecoration: 'none', fontWeight: '600' }}>
           ← Back to Home
         </Link>
-        
-        {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem', textAlign: 'center', padding: '0.5rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: 'var(--radius-md)' }}>{error}</div>}
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -61,13 +62,23 @@ export default function Signup() {
           </div>
           <div className="form-group">
             <label className="form-label">Password</label>
-            <input 
-              type="password" 
-              className="form-input" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-            />
+            <div className="password-input-wrapper">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                className="form-input" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
           <div className="form-group">
             <label className="form-label">Role</label>
@@ -92,3 +103,4 @@ export default function Signup() {
     </div>
   );
 }
+

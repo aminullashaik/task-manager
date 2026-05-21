@@ -2,13 +2,13 @@ import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../api";
 import { AuthContext } from "../context/AuthContext";
-import { CheckSquare } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
   const { addToast } = useToast();
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ export default function Login() {
       }
     } catch (err) {
       const errorMsg = err.response?.data?.message || "An error occurred during login.";
-      setError(errorMsg);
       addToast(errorMsg, "error");
     }
   };
@@ -45,8 +44,6 @@ export default function Login() {
           ← Back to Overview
         </Link>
         
-        {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem', textAlign: 'center', padding: '0.5rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: 'var(--radius-md)' }}>{error}</div>}
-        
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Email or Username</label>
@@ -60,13 +57,23 @@ export default function Login() {
           </div>
           <div className="form-group">
             <label className="form-label">Password</label>
-            <input 
-              type="password" 
-              className="form-input" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-            />
+            <div className="password-input-wrapper">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                className="form-input" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
           <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
             Sign In

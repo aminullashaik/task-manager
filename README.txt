@@ -1,90 +1,78 @@
-Project Name: JBS - Enterprise Task Manager (Full-Stack)
+======================================================
+JBS - Enterprise Task Manager (MERN Full-Stack)
+======================================================
 
-Description:
-JBS is a premium, high-performance team task management system engineered using the MERN stack. 
-Unlike standard template-driven applications, this platform was built with a highly custom, handcrafted design system. Every single panel, input field, and interaction was designed using bespoke Vanilla CSS (without relying on Tailwind or external UI component libraries) to create an ultra-modern, glassmorphism dark-mode interface. 
+An enterprise-grade team task management platform featuring a custom glassmorphism dark-mode UI, collaborative task locking, work entry logging, and real-time metrics.
 
-The application is packed with fluid CSS micro-animations, spring-effect hovers, and clean component structures designed to offer an incredibly responsive, premium user experience. On the engineering side, it implements highly robust database schemas, secure authorization layers, and a dynamic lock-based collaborative workflow.
+------------------------------------------------------
+1. TECH STACK & TOOLS USED
+------------------------------------------------------
+* Frontend:
+  - React.js (Vite)
+  - Vanilla CSS (Bespoke glassmorphism & responsive layouts)
+  - Lucide React (SVG icon library)
+  - Axios (HTTP client with JWT authorization interceptors)
+  - React Router DOM (Single Page Application routing)
 
-Key Features:
-- Bespoke Glassmorphism Landing Page & User Interface
-- Secure Authentication (Signup/Login with JWT & automatic email completion)
-- Project and team management (Create projects, assign members)
-- Multi-User Task Assignment (Assign tasks to multiple team members simultaneously)
-- Task Locking System (Lock tasks before working on them to prevent concurrent conflicts)
-- Live Work Entry Logging (Log Date and Time spent on active tasks securely)
-- Dynamic Dashboard (Real-time counts for total, completed, working, locked, and overdue tasks)
-- Role-based access control (Admins manage, members lock and log work entries)
-- Hand-coded Vanilla CSS Layouts (Zero Tailwind or bootstrap imports)
-- Fully responsive layout with customized CSS keyframe micro-animations
+* Backend:
+  - Node.js & Express.js (REST API Server)
+  - MongoDB & Mongoose (NoSQL database & schema modeling)
+  - JSON Web Tokens (JWT) (State-less authorization)
+  - Bcrypt.js (Secure password hashing)
 
-Tech Stack:
-- Frontend: React.js, Vite, Vanilla CSS, Lucide Icons, Axios
-- Backend: Node.js, Express.js (v5), MongoDB Atlas, Mongoose, JWT, Bcrypt
+------------------------------------------------------
+2. KEY FEATURES
+------------------------------------------------------
+* Collaborative Locking (Concurrency Control):
+  - Members lock tasks before working on them to prevent conflicts.
+  - Active locks show who is working on the task and prevent others from editing it.
+  - Unlocking resets the task status back to pending.
 
-===============================
-TECHNICAL ARCHITECTURE & DESIGN
-===============================
+* Task & Project Management:
+  - Admins can create projects and assign multiple members to individual tasks.
+  - Double-tab filtering ("My Tasks" and "All Tasks") for custom developer workspaces.
+  - Embedded work logs track contributor names, dates, and hours spent on a task.
 
-1. Database Structure Design (Mongoose)
---------------------------------------
-- User Schema: Represents users with name, email, password, and role ('admin', 'member', 'client').
-- Task Schema:
-  * title: String (Required)
-  * description: String
-  * projectId: Schema.Types.ObjectId (Ref: 'Project')
-  * assignedTo: [Schema.Types.ObjectId] (Ref: 'User', Supports multiple team members)
-  * status: String (default: 'pending', updates to 'working' on lock, 'done' on complete)
-  * dueDate: Date
-  * isLocked: Boolean (default: false)
-  * lockedBy: Schema.Types.ObjectId (Ref: 'User', default: null)
-  * workEntries: Array of objects containing:
-    - date: String (Required)
-    - time: String (Required)
-    - userName: String (Required, auto-populated securely by server session)
+* Secure Authentication & Roles:
+  - Password hashing and stateless JWT-based session security.
+  - Role-based views: Admin (create/manage), Member (lock/log), Client (read-only viewer).
+  - Streamlined Toast alerts for cleaner, layout-shift-free feedback.
 
-2. Core Backend APIs
--------------------
-- GET /tasks/my-tasks: Retrieves only the tasks assigned to the currently logged-in user.
-- POST /tasks: Admin creates a task and assigns it to multiple user IDs.
-- PATCH /tasks/:id/lock: Locks a task for the authenticated user and sets status to 'working'. Prevents other users from locking or working on it.
-- PATCH /tasks/:id/unlock: Releases the task lock back to 'pending' state.
-- POST /tasks/:id/work-entry: Appends a work log (Date, Time, and userName securely fetched from active DB user session).
-- PATCH /tasks/:id/complete: Marks status as 'done', resets lock to false, and releases the locking user.
+* Real-Time Analytics Dashboard:
+  - Live charts showing counts of total tasks, completed, and overdue status.
 
-3. Frontend UI Screens & Workflows
----------------------------------
-- Team Task Creation & Assignment:
-  * Modal provides a checkbox-based multi-select grid to select and assign multiple users to a task.
-- Dynamic Task List Screen:
-  * Standardized "My Tasks" and "All Tasks" tabs to partition viewable items based on user context.
-  * Interactive avatar initials stack representing all assigned team members.
-- Task Working Panel (Dynamic Card Expansion):
-  * Shows "Lock Task" button for assignees.
-  * If locked by current user, shows the active "Log Work Entry" form (Date, Time spent) and a green "Complete" button.
-  * Displays a collapsible "Show Work Logs" section showing chronological entries with names, dates, and times.
+------------------------------------------------------
+3. HOW TO RUN THE PROJECT LOCALLY
+------------------------------------------------------
+* Prerequisites:
+  - Node.js (v18+)
+  - MongoDB instance (Atlas or local)
 
-4. Frontend and Backend Interaction (Data Flow)
-----------------------------------------------
-- Auth: React saves JWT token on successful login. Axios interceptor automatically attaches 'Bearer <Token>' to all HTTP Authorization headers.
-- Lock Flow: User clicks "Lock". Frontend sends PATCH to /tasks/:id/lock. Express verifies token, updates Mongo document, and returns updated Task. State updates in React to unlock the form.
-- Work Log Flow: User enters Date & Time, submits. Frontend sends POST to /tasks/:id/work-entry. Express extracts userID from JWT, fetches Name from User Collection, appends log to array, and sends back updated data.
+* Backend Configuration:
+  1. Navigate to the backend directory:
+     cd backend
+  2. Create a '.env' file:
+     PORT=5005
+     MONGO_URI=your_mongodb_connection_string
+     JWT_SECRET=your_jwt_secret_key
+  3. Install dependencies & start server:
+     npm install
+     npm start
 
-Instructions to Run Locally:
-1. Backend Setup:
-   - cd backend
-   - npm install
-   - Configure MONGO_URI and JWT_SECRET in .env
-   - npm start (runs on dynamic port, defaults to 5005)
+* Frontend Configuration:
+  1. Navigate to the frontend directory:
+     cd frontend
+  2. Install dependencies & start dev server:
+     npm install
+     npm run dev
+  3. View in browser at: http://localhost:5173
 
-2. Frontend Setup:
-   - cd frontend
-   - npm install
-   - npm run dev (runs on port 5173)
+------------------------------------------------------
+4. DEPLOYMENT LINKS
+------------------------------------------------------
+* Live Application URL: https://task-manager-production-2257.up.railway.app
+* Backend API Endpoint: https://task-manager-production-852a.up.railway.app
+* GitHub Repository: https://github.com/aminullashaik/task-manager
 
-Deployment Links:
-- Live URL: https://task-manager-production-2257.up.railway.app
-- GitHub Repository Link: https://github.com/aminullashaik/task-manager
-- Backend API Link: https://task-manager-production-852a.up.railway.app
-
-Note: Developed by Shaik Aminulla
+------------------------------------------------------
+Developed by Shaik Aminulla
